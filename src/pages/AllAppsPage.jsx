@@ -3,7 +3,7 @@ import { DiVisualstudio } from 'react-icons/di';
 import AppCard from '../ui/AppCard';
 
 const AllAppsPage = () => {
-  const [apps, setApps] = useState([]);
+  const [appsData, setAppsData] = useState([]);
   const [totalApps, setTotalApps] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(0);
@@ -14,8 +14,8 @@ const AllAppsPage = () => {
     fetch(`http://localhost:5000/apps?limit=${limit}&skip=${currentPage * limit}`)
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
-        setApps(data?.apps);
+        // console.log(data);
+        setAppsData(data?.apps);
         setTotalApps(data?.count);
         const requiredPages = Math.ceil(data?.count / limit);
         setTotalPages(requiredPages);
@@ -38,7 +38,7 @@ const AllAppsPage = () => {
       {/* Search and Count */}
       <div className="w-11/12 mx-auto flex flex-col-reverse lg:flex-row gap-5 items-start justify-between lg:items-end mt-10">
         <div>
-          <h2 className="text-lg underline font-bold">({apps.length}) Apps Found</h2>
+          <h2 className="text-lg underline font-bold">({appsData.length}) Apps Found</h2>
         </div>
 
         <form>
@@ -81,23 +81,37 @@ const AllAppsPage = () => {
       <>
         {/* Apps Grid */}
         <div className="w-11/12 mx-auto grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 my-10 gap-5">
-          {apps.length === 0 ? (
+          {appsData.length === 0 ? (
             <div className="col-span-full text-center py-10 space-y-10">
               <h2 className="text-6xl font-semibold opacity-60">No Apps Found</h2>
               <button className="btn btn-primary">Show All Apps</button>
             </div>
           ) : (
-            apps.map((app) => <AppCard key={app.id} app={app}></AppCard>)
+            appsData.map((app) => <AppCard key={app.id} app={app}></AppCard>)
           )}
         </div>
 
         {/* Pagination Buttons */}
         <div className="flex justify-center flex-wrap gap-3 mb-10">
+          {currentPage > 0 && (
+            <button onClick={() => setCurrentPage(currentPage - 1)} className="btn">
+              Prev
+            </button>
+          )}
           {paginationArrayKeys.map((index) => (
-            <button onClick={() => setCurrentPage(index)} key={index} className="btn">
+            <button
+              onClick={() => setCurrentPage(index)}
+              key={index}
+              className={`btn ${index === currentPage && 'btn-primary'}`}
+            >
               {index}
             </button>
           ))}
+          {currentPage < totalPages - 1 && (
+            <button onClick={() => setCurrentPage(currentPage + 1)} className="btn">
+              Next
+            </button>
+          )}
         </div>
       </>
     </div>
