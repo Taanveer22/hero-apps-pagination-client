@@ -3,19 +3,24 @@ import { DiVisualstudio } from 'react-icons/di';
 import AppCard from '../ui/AppCard';
 
 const AllAppsPage = () => {
-  const limit = 10;
   const [apps, setApps] = useState([]);
   const [totalApps, setTotalApps] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const [currentPage, setCurrentPage] = useState(0);
+  const limit = 10;
+  const paginationArrayKeys = [...Array(totalPages).keys()];
 
   useEffect(() => {
-    fetch(`http://localhost:5000/apps?limit=${limit}&skip=10`)
+    fetch(`http://localhost:5000/apps?limit=${limit}&skip=${currentPage * limit}`)
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
         setApps(data?.apps);
         setTotalApps(data?.count);
+        const requiredPages = Math.ceil(data?.count / limit);
+        setTotalPages(requiredPages);
       });
-  }, []);
+  }, [currentPage]);
 
   return (
     <div>
@@ -58,10 +63,10 @@ const AllAppsPage = () => {
           </label>
         </form>
 
-        <div className="">
-          <select className="select bg-white">
-            <option selected disabled={true}>
-              Sort by <span className="text-xs">R / S / D</span>
+        <div>
+          <select className="select bg-white" defaultValue={'Sort by R / S / D'}>
+            <option value={'Sort by R / S / D'} disabled={true}>
+              Sort by R / S / D
             </option>
             <option value={'rating-desc'}>Ratings : High - Low</option>
             <option value={'rating-asc'}>Ratings : Low - High</option>
@@ -84,6 +89,15 @@ const AllAppsPage = () => {
           ) : (
             apps.map((app) => <AppCard key={app.id} app={app}></AppCard>)
           )}
+        </div>
+
+        {/* Pagination Buttons */}
+        <div className="flex justify-center flex-wrap gap-3 mb-10">
+          {paginationArrayKeys.map((index) => (
+            <button onClick={() => setCurrentPage(index)} key={index} className="btn">
+              {index}
+            </button>
+          ))}
         </div>
       </>
     </div>
