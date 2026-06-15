@@ -1,42 +1,19 @@
-import { useEffect, useState } from 'react';
 import { GrInstall } from 'react-icons/gr';
-import { useLoaderData } from 'react-router';
-import { toast } from 'react-toastify';
 import InstallCard from '../ui/InstallCard';
 
 const MyInstallation = () => {
-  const [myAppsIds] = useState(JSON.parse(localStorage.getItem('apps')) || []);
-  const allApps = useLoaderData();
-  const [myApps, setMyApps] = useState([]);
+  // const { apps } = useLoaderData();
+  // const [myApps, setMyApps] = useState([]);
 
-  useEffect(() => {
-    const apps = [];
-    myAppsIds.forEach((id) => {
-      const isExist = allApps.find((app) => app._id == id);
-      if (isExist) {
-        apps.push(isExist);
-      }
-    });
-    setMyApps(apps);
-  }, [allApps, myAppsIds]);
+  // useEffect(() => {
+  //   const apps = [];
+  // }, [apps, myAppsIds]);
 
   const handleSort = (type) => {
-    if (type == 'asc') {
-      const sorted = myApps.sort((a, b) => a.size - b.size);
-      console.log(type, sorted);
-      setMyApps([...sorted]);
-    } else if (type == 'desc') {
-      const sorted = myApps.sort((a, b) => b.size - a.size);
-      console.log(type, sorted);
-      setMyApps([...sorted]);
-    }
+    console.log(type);
   };
   const onUninstall = (id, title) => {
-    const remaining = myApps.filter((app) => app.id != id);
-    setMyApps([...remaining]);
-    const remainingIds = remaining.map((app) => app.id);
-    localStorage.setItem('apps', JSON.stringify(remainingIds));
-    toast(`🗑️ ${title} un-installed from your Device`);
+    console.log(id, title);
   };
 
   return (
