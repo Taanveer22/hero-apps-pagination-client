@@ -1,17 +1,29 @@
+import { useEffect, useState } from 'react';
 import { DiVisualstudio } from 'react-icons/di';
 import AppCard from '../ui/AppCard';
 
-import { useLoaderData } from 'react-router';
-
 const AllAppsPage = () => {
-  const apps = useLoaderData();
+  const limit = 10;
+  const [apps, setApps] = useState([]);
+  const [totalApps, setTotalApps] = useState(0);
+
+  useEffect(() => {
+    fetch(`http://localhost:5000/apps?limit=${limit}&skip=10`)
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        setApps(data?.apps);
+        setTotalApps(data?.count);
+      });
+  }, []);
+
   return (
     <div>
       <title>All Apps | Hero Apps</title>
       {/* Header */}
       <div className="py-16">
         <h2 className="text-4xl font-bold text-center text-primary flex justify-center gap-3">
-          Our All Applications
+          Our All Applications {totalApps}
           <DiVisualstudio size={48} className="text-secondary"></DiVisualstudio>
         </h2>
         <p className="text-center text-gray-400">

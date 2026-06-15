@@ -17,12 +17,11 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <Home></Home>,
-        loader: () => fetch('http://localhost:5000/apps'),
+        loader: () => fetch('http://localhost:5000/apps?limit=8'),
       },
       {
         path: '/apps',
         element: <AllAppsPage></AllAppsPage>,
-        loader: () => fetch('http://localhost:5000/apps?limit=10&skip=10'),
       },
       {
         path: '/apps/:id',
