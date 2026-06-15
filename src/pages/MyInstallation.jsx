@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import { GrInstall } from 'react-icons/gr';
+import { toast } from 'react-toastify';
+import InstallCard from '../ui/InstallCard';
 
 const MyInstallation = () => {
   const [myApps, setMyApps] = useState([]);
@@ -8,7 +10,7 @@ const MyInstallation = () => {
     fetch(`http://localhost:5000/apps/install`)
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
+        // console.log(data);
         setMyApps(data);
       });
   }, []);
@@ -17,9 +19,20 @@ const MyInstallation = () => {
     console.log(type);
   };
 
-  // const handleUninstall = (id) => {
-  //   console.log(id);
-  // };
+  const handleUninstall = (id) => {
+    // console.log(id);
+    fetch(`http://localhost:5000/apps/install/${id}`, {
+      method: 'DELETE',
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        if (data?.deletedCount) {
+          toast.warning('Deleted App Completely');
+        }
+        setMyApps((prevMyApps) => prevMyApps.filter((appItem) => appItem._id !== id));
+      });
+  };
 
   return (
     <div className="px-5 lg:w-11/12 mx-auto py-10">
@@ -38,8 +51,12 @@ const MyInstallation = () => {
           {myApps.length} Apps Found
         </h2>
         <div className="">
-          <select onClick={(e) => handleSort(e.target.value)} className="select bg-white">
-            <option selected disabled={true}>
+          <select
+            onClick={(e) => handleSort(e.target.value)}
+            defaultValue="Sort By Size"
+            className="select bg-white"
+          >
+            <option value={'Sort By Size'} disabled={true}>
               Sort By Size
             </option>
             <option value={'asc'}>Low-High</option>
@@ -49,10 +66,13 @@ const MyInstallation = () => {
       </div>
       <div className="divider"></div>
       <div className=" grid grid-cols-1 gap-5">
-        {myApps.length}
-        {/* {myApps.map((app) => (
-          <InstallCard key={app._id} app={app} handleUninstall={handleUninstall}></InstallCard>
-        ))} */}
+        {myApps.map((appItem) => (
+          <InstallCard
+            key={appItem._id}
+            appItem={appItem}
+            handleUninstall={handleUninstall}
+          ></InstallCard>
+        ))}
       </div>
     </div>
   );

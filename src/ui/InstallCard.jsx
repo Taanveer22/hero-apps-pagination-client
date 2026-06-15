@@ -2,8 +2,8 @@ import { FaStar } from 'react-icons/fa6';
 import { GrDownload } from 'react-icons/gr';
 import { Link } from 'react-router';
 
-const InstallCard = ({ app, handleUninstall }) => {
-  const { image, title, _id, ratingAvg, downloads, size } = app;
+const InstallCard = ({ appItem, handleUninstall }) => {
+  const { image, title, _id, ratingAvg, downloads, size } = appItem;
 
   return (
     <div className="flex items-center gap-3 p-3 rounded-xl bg-white shadow-sm transition-all duration-200">
