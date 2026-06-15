@@ -1,20 +1,25 @@
+import { useEffect, useState } from 'react';
 import { GrInstall } from 'react-icons/gr';
-import InstallCard from '../ui/InstallCard';
 
 const MyInstallation = () => {
-  // const { apps } = useLoaderData();
-  // const [myApps, setMyApps] = useState([]);
+  const [myApps, setMyApps] = useState([]);
 
-  // useEffect(() => {
-  //   const apps = [];
-  // }, [apps, myAppsIds]);
+  useEffect(() => {
+    fetch(`http://localhost:5000/apps/install`)
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        setMyApps(data);
+      });
+  }, []);
 
   const handleSort = (type) => {
     console.log(type);
   };
-  const onUninstall = (id, title) => {
-    console.log(id, title);
-  };
+
+  // const handleUninstall = (id) => {
+  //   console.log(id);
+  // };
 
   return (
     <div className="px-5 lg:w-11/12 mx-auto py-10">
@@ -44,9 +49,10 @@ const MyInstallation = () => {
       </div>
       <div className="divider"></div>
       <div className=" grid grid-cols-1 gap-5">
-        {myApps.map((app) => (
-          <InstallCard key={app.id} app={app} onUninstall={onUninstall}></InstallCard>
-        ))}
+        {myApps.length}
+        {/* {myApps.map((app) => (
+          <InstallCard key={app._id} app={app} handleUninstall={handleUninstall}></InstallCard>
+        ))} */}
       </div>
     </div>
   );
