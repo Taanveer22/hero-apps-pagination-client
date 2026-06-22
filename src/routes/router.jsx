@@ -1,4 +1,5 @@
 import { createBrowserRouter } from 'react-router';
+import baseURL from '../api/apiLink';
 import Root from '../layouts/Root';
 import AllAppsPage from '../pages/AllAppsPage';
 import AppDetails from '../pages/AppDetails';
@@ -17,7 +18,7 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <Home></Home>,
-        loader: () => fetch('http://localhost:5000/apps?limit=8'),
+        loader: () => fetch(`${baseURL}/apps?limit=8`),
       },
       {
         path: '/apps',
@@ -26,7 +27,7 @@ const router = createBrowserRouter([
       {
         path: '/apps/:id',
         element: <AppDetails></AppDetails>,
-        loader: ({ params }) => fetch(`http://localhost:5000/apps/${params.id}`),
+        loader: ({ params }) => fetch(`${baseURL}/apps/${params.id}`),
       },
       {
         path: '/installations',

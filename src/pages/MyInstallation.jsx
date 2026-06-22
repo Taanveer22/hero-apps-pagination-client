@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react';
 import { GrInstall } from 'react-icons/gr';
 import { toast } from 'react-toastify';
+import baseURL from '../api/apiLink';
 import InstallCard from '../ui/InstallCard';
 
 const MyInstallation = () => {
   const [myApps, setMyApps] = useState([]);
 
   useEffect(() => {
-    fetch(`http://localhost:5000/apps/install`)
+    fetch(`${baseURL}/apps/install`)
       .then((res) => res.json())
       .then((data) => {
         // console.log(data);
@@ -21,7 +22,7 @@ const MyInstallation = () => {
 
   const handleUninstall = (id) => {
     // console.log(id);
-    fetch(`http://localhost:5000/apps/install/${id}`, {
+    fetch(`${baseURL}/apps/install/${id}`, {
       method: 'DELETE',
     })
       .then((res) => res.json())

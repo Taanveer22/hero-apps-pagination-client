@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { DiVisualstudio } from 'react-icons/di';
+import baseURL from '../api/apiLink';
 import AppCard from '../ui/AppCard';
 
 const AllAppsPage = () => {
@@ -9,13 +10,14 @@ const AllAppsPage = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [sortField, setSortField] = useState('size');
   const [sortOrder, setSortOrder] = useState('asc');
+  const [search, setSearch] = useState('');
 
   const pageLimit = 10;
   const paginationArrayKeys = [...Array(totalPages).keys()];
 
   useEffect(() => {
     fetch(
-      `http://localhost:5000/apps?limit=${pageLimit}&skip=${currentPage * pageLimit}&sortField=${sortField}&sortOrder=${sortOrder}`
+      `${baseURL}/apps?limit=${pageLimit}&skip=${currentPage * pageLimit}&sortField=${sortField}&sortOrder=${sortOrder}&search=${search}`
     )
       .then((res) => res.json())
       .then((data) => {
@@ -25,7 +27,7 @@ const AllAppsPage = () => {
         const requiredPages = Math.ceil(data?.count / pageLimit);
         setTotalPages(requiredPages);
       });
-  }, [currentPage, sortField, sortOrder]);
+  }, [currentPage, sortField, sortOrder, search]);
 
   const handleSortChange = (e) => {
     // console.log(e.target.value);
@@ -34,13 +36,18 @@ const AllAppsPage = () => {
     setSortOrder(sortBy.split('-')[1]);
   };
 
+  const handleSearchChange = (e) => {
+    console.log(e.target.value);
+    setSearch(e.target.value);
+  };
+
   return (
     <div>
       <title>All Apps | Hero Apps</title>
       {/* Header */}
       <div className="py-16">
         <h2 className="text-4xl font-bold text-center text-primary flex justify-center gap-3">
-          Our All Applications {totalApps}
+          All Applications {totalApps}
           <DiVisualstudio size={48} className="text-secondary"></DiVisualstudio>
         </h2>
         <p className="text-center text-gray-400">
@@ -71,7 +78,12 @@ const AllAppsPage = () => {
                 <path d="m21 21-4.3-4.3"></path>
               </g>
             </svg>
-            <input type="search" className="" placeholder="Search Apps" />
+            <input
+              onChange={handleSearchChange}
+              type="search"
+              className=""
+              placeholder="Search Apps"
+            />
           </label>
         </form>
 

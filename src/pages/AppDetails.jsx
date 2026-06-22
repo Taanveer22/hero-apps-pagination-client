@@ -3,6 +3,7 @@ import { FaStar } from 'react-icons/fa6';
 import { MdReviews } from 'react-icons/md';
 import { useLoaderData, useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
+import baseURL from '../api/apiLink';
 import NotFound from '../ui/NotFound';
 import ReviewChart from '../ui/ReviewChart';
 
@@ -24,7 +25,7 @@ const AppDetails = () => {
 
   const handleInstall = (id) => {
     console.log(id);
-    fetch(`http://localhost:5000/apps/install`, {
+    fetch(`${baseURL}/apps/install`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
