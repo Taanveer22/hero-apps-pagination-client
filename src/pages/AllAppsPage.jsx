@@ -7,20 +7,32 @@ const AllAppsPage = () => {
   const [totalApps, setTotalApps] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(0);
-  const limit = 10;
+  const [sortField, setSortField] = useState('size');
+  const [sortOrder, setSortOrder] = useState('asc');
+
+  const pageLimit = 10;
   const paginationArrayKeys = [...Array(totalPages).keys()];
 
   useEffect(() => {
-    fetch(`http://localhost:5000/apps?limit=${limit}&skip=${currentPage * limit}`)
+    fetch(
+      `http://localhost:5000/apps?limit=${pageLimit}&skip=${currentPage * pageLimit}&sortField=${sortField}&sortOrder=${sortOrder}`
+    )
       .then((res) => res.json())
       .then((data) => {
         // console.log(data);
         setAppsData(data?.apps);
         setTotalApps(data?.count);
-        const requiredPages = Math.ceil(data?.count / limit);
+        const requiredPages = Math.ceil(data?.count / pageLimit);
         setTotalPages(requiredPages);
       });
-  }, [currentPage]);
+  }, [currentPage, sortField, sortOrder]);
+
+  const handleSortChange = (e) => {
+    // console.log(e.target.value);
+    const sortBy = e.target.value;
+    setSortField(sortBy.split('-')[0]);
+    setSortOrder(sortBy.split('-')[1]);
+  };
 
   return (
     <div>
@@ -64,7 +76,11 @@ const AllAppsPage = () => {
         </form>
 
         <div>
-          <select className="select bg-white" defaultValue={'Sort by R / S / D'}>
+          <select
+            onChange={handleSortChange}
+            className="select bg-white"
+            defaultValue={'Sort by R / S / D'}
+          >
             <option value={'Sort by R / S / D'} disabled={true}>
               Sort by R / S / D
             </option>
@@ -87,7 +103,7 @@ const AllAppsPage = () => {
               <button className="btn btn-primary">Show All Apps</button>
             </div>
           ) : (
-            appsData.map((app) => <AppCard key={app.id} app={app}></AppCard>)
+            appsData.map((appItem) => <AppCard key={appItem.id} appItem={appItem}></AppCard>)
           )}
         </div>
 
@@ -104,7 +120,7 @@ const AllAppsPage = () => {
               key={index}
               className={`btn ${index === currentPage && 'btn-primary'}`}
             >
-              {index}
+              {index + 1}
             </button>
           ))}
           {currentPage < totalPages - 1 && (

@@ -1,25 +1,25 @@
-import { useMemo } from 'react';
 import { BiDownload } from 'react-icons/bi';
 import { FaStar } from 'react-icons/fa6';
 import { MdReviews } from 'react-icons/md';
-import { useLoaderData } from 'react-router';
+import { useLoaderData, useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
 import NotFound from '../ui/NotFound';
 import ReviewChart from '../ui/ReviewChart';
 
 const AppDetails = () => {
+  const navigate = useNavigate();
   const appData = useLoaderData();
-  console.log(appData);
+  // console.log(appData);
+  if (!appData) {
+    return <NotFound message={'App Is Not Found'}></NotFound>;
+  }
 
   const { _id, ...detailsData } = appData || {};
 
-  const finalRatings = useMemo(() => {
-    if (!appData.ratings) return [];
-    return [...appData.ratings].reverse();
-  }, [appData.ratings]);
+  let finalRatings = [];
 
-  if (!appData) {
-    return <NotFound message={'App Is Not Found'}></NotFound>;
+  if (Array.isArray(appData?.ratings)) {
+    finalRatings = [...appData.ratings].reverse();
   }
 
   const handleInstall = (id) => {
@@ -33,10 +33,11 @@ const AppDetails = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
+        // console.log(data);
         if (data?.insertedId) {
           toast.success('app installed successfully');
         }
+        navigate('/installations');
       });
   };
 

@@ -2,7 +2,7 @@ import { FaStar } from 'react-icons/fa6';
 import { GrDownload } from 'react-icons/gr';
 import { Link } from 'react-router';
 
-const AppCard = ({ app }) => {
+const AppCard = ({ appItem }) => {
   const {
     image,
     title,
@@ -10,22 +10,23 @@ const AppCard = ({ app }) => {
     // companyName,
     _id,
     // description,
-    // size,
+    size,
     // reviews,
     ratingAvg,
     // ratings,
     downloads,
-  } = app;
+  } = appItem;
   return (
     <Link
       to={`/apps/${_id}`}
-      className="card shadow-lg cursor-pointer  bg-white hover:bg-base-200 hover:-translate-y-2 transition-all duration-200 justify-around  p-4 gap-4"
+      className="card shadow-lg cursor-pointer bg-white hover:bg-base-200 hover:-translate-y-2 transition-all duration-200 justify-around p-4 gap-4"
     >
       <figure className=" pb-0">
         <img src={image} alt="Shoes" className=" h-full w-full object-cover rounded-2xl" />
       </figure>
-      <div className="">
+      <div>
         <p className="font-semibold text-center">{title}</p>
+        <p className="font-semibold text-center">{size} MB</p>
       </div>
       <div className="flex justify-between flex-wrap">
         <div className="badge badge-soft badge-success ">
